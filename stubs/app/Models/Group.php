@@ -3,7 +3,7 @@
 namespace Jurager\Teams\Models;
 
 use Jurager\Teams\Teams;
-use Illuminate\Database\Eloquent\Model;
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 
 abstract class Group extends Model
 {
