@@ -12,6 +12,52 @@ use Jurager\Teams\Teams;
 trait HasTeams
 {
     /**
+     * Determine if the given team is the current team.
+     *
+     * @param  mixed  $team
+     * @return bool
+     */
+    public function isCurrentTeam($team)
+    {
+        return $team->id === $this->currentTeam->id;
+    }
+
+    /**
+     * Get the current team of the user's context.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function currentTeam()
+    {
+        if (is_null($this->current_team_id) && $this->id) {
+            $this->switchTeam($this->personalTeam());
+        }
+
+        return $this->belongsTo(Teams::teamModel(), 'current_team_id');
+    }
+
+    /**
+     * Switch the user's context to the given team.
+     *
+     * @param  mixed  $team
+     * @return bool
+     */
+    public function switchTeam($team)
+    {
+        if (! $this->belongsToTeam($team)) {
+            return false;
+        }
+
+        $this->forceFill([
+            'current_team_id' => $team->id,
+        ])->save();
+
+        $this->setRelation('currentTeam', $team);
+
+        return true;
+    }
+
+    /**
      * Get all the teams the user owns or belongs to.
      *
      * @return Collection
