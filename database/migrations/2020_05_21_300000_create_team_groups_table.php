@@ -14,8 +14,8 @@ class CreateTeamGroupsTable extends Migration
     public function up()
     {
         Schema::create(config('teams.tables.team_groups', 'team_groups'), function (Blueprint $table) {
-            $table->id();
-            $table->foreignId(config('teams.foreign_keys.team_id', 'team_id'))->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid(config('teams.foreign_keys.team_id', 'team_id'))->constrained()->cascadeOnDelete();
             $table->string('name');
         });
     }
